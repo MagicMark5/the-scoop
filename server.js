@@ -29,7 +29,9 @@ const routes = {
   '/articles/:id/downvote': {
     'PUT': downvoteArticle
   },
-  '/comments': {},
+  '/comments': {
+    'POST': createComment,
+  },
   '/comments/:id': {},
   '/comments/:id/upvote': {},
   '/comments/:id/downvote': {}
@@ -244,6 +246,51 @@ function downvote(item, username) {
     item.downvotedBy.push(username);
   }
   return item;
+}
+
+function createComment(url, request) {
+  /* database.comments properties
+  comments - an object with keys of IDs and values of the corresponding comments
+  id - Number, unique to each comment
+  body - String
+  username - String, the username of the author
+  articleId - Number, the ID of the article the comment belongs to
+  upvotedBy - Array of usernames, corresponding to users who upvoted the comment
+  downvotedBy - Array of usernames, corresponding to users who downvoted the comment */
+
+  /* POST /comments:
+  Receives comment information from comment property of request body
+  Creates new comment and adds it to database, 
+  returns a 201 response with comment on comment property of response body
+  If body isn’t supplied, user with supplied username doesn’t exist, 
+  or article with supplied article ID doesn’t exist, returns a 400 response
+   */
+  const requestComment = request.body && request.body.comment;
+  const response = {};
+
+  if (requestComment && requestComment.body && requestComment.username 
+      && database.users[requestComment.username] && database.articles[requestComment.articleId]) {
+    const comment = {
+      id: database.nextCommentId++,
+      body: requestComment.body,
+      username: requestComment.username,
+      articleId: requestComment.articleId,
+      upvotedBy: [],
+      downvotedBy: []
+    };
+
+    database.comments[comment.id] = comment;
+    database.users[comment.username].commentIds.push(comment.id);
+    database.articles[comment.articleId].commentIds.push(comment.id);
+
+    response.body = {comment: comment};
+    response.status = 201;
+  } else {
+    response.status = 400;
+  }
+
+  return response;
+
 }
 
 // Write all code above this line.
