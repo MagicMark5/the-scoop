@@ -30,9 +30,11 @@ const routes = {
     'PUT': downvoteArticle
   },
   '/comments': {
-    'POST': createComment,
+    'POST': createComment
   },
-  '/comments/:id': {},
+  '/comments/:id': {
+    'PUT': updateComment
+  },
   '/comments/:id/upvote': {},
   '/comments/:id/downvote': {}
 };
@@ -248,23 +250,27 @@ function downvote(item, username) {
   return item;
 }
 
-function createComment(url, request) {
-  /* database.comments properties
+/* --------------------- Comments ---------------------- */
+
+  /* database.comments properties:
   comments - an object with keys of IDs and values of the corresponding comments
   id - Number, unique to each comment
   body - String
   username - String, the username of the author
   articleId - Number, the ID of the article the comment belongs to
   upvotedBy - Array of usernames, corresponding to users who upvoted the comment
-  downvotedBy - Array of usernames, corresponding to users who downvoted the comment */
+  downvotedBy - Array of usernames, corresponding to users who downvoted the comment 
+  */
 
-  /* POST /comments:
+function createComment(url, request) {
+  /* 
+  POST /comments
   Receives comment information from comment property of request body
   Creates new comment and adds it to database, 
   returns a 201 response with comment on comment property of response body
   If body isn’t supplied, user with supplied username doesn’t exist, 
-  or article with supplied article ID doesn’t exist, returns a 400 response
-   */
+  or article with supplied article ID doesn’t exist, returns a 400 response 
+  */
   const requestComment = request.body && request.body.comment;
   const response = {};
 
@@ -290,8 +296,39 @@ function createComment(url, request) {
   }
 
   return response;
+};
 
+function updateComment(url, request) {
+  /*
+  PUT /comments/:id
+  Receives comment ID from URL parameter and updated comment from comment property of request body
+  Updates body of corresponding comment in database, 
+  Returns a 200 response with the updated comment on comment property of the response body
+  */
+ const id = Number(url.split('/').filter(segment => segment)[1]);
+ const savedComment = database.comments[id];
+ const requestComment = request.body && request.body.comment;
+ const response = {};
+ 
+ if (!id || !requestComment) {
+   // If no ID or updated comment is supplied, returns 400 response 
+   response.status = 400;
+  } else if (!savedComment) {
+    // If comment with given ID does not exist, returns 404 response
+    response.status = 404;
+  } else {
+    // Update body of comment in database 
+    savedComment.body = requestComment.body || savedComment.body;
+    // savedComment.url = requestArticle.url || savedArticle.url;
+    // Return 200 response with the updated comment on comment property of the response body
+    response.body = {comment: savedComment};
+    response.status = 200;
+  }
+
+  return response;
 }
+
+
 
 // Write all code above this line.
 
