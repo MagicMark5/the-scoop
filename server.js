@@ -33,7 +33,8 @@ const routes = {
     'POST': createComment
   },
   '/comments/:id': {
-    'PUT': updateComment
+    'PUT': updateComment,
+    'DELETE': deleteComment
   },
   '/comments/:id/upvote': {},
   '/comments/:id/downvote': {}
@@ -87,6 +88,18 @@ function getOrCreateUser(url, request) {
 
   return response;
 }
+
+/* ----------- Articles ----------- */
+
+// const article = {
+//   id: database.nextArticleId++,
+//   title: requestArticle.title,
+//   url: requestArticle.url,
+//   username: requestArticle.username,
+//   commentIds: [],
+//   upvotedBy: [],
+//   downvotedBy: []
+// };
 
 function getArticles(url, request) {
   const response = {};
@@ -326,8 +339,38 @@ function updateComment(url, request) {
   }
 
   return response;
-}
+};
 
+function deleteComment(url, request) {
+  /*
+  DELETE /comments/:id
+  Receives comment ID from URL parameter
+  Deletes comment from database and 
+  removes all references to its ID from corresponding user and article models, returns 204 response
+  If no ID is supplied or comment with supplied ID doesn’t exist, returns 404 response 
+  */
+  const id = Number(url.split('/').filter(segment => segment)[1]);
+  const savedComment = database.comments[id];
+  const response = {};
+
+  if (savedComment) {
+    const commentUser = database.users[savedComment.username];
+    const commentArticle = database.articles[savedComment.articleId];
+    // Delete comment from database
+    database.comments[id] = null;
+    // Remove a deleted comment ID from the author's comment IDs
+    commentUser.commentIds = commentUser.commentIds.filter(commentId => commentId !== id);
+    // Remove a deleted comment ID from the article's comment IDs
+    commentArticle.commentIds = commentArticle.commentIds.filter(commentId => commentId !== id);
+    // returns 204 response for sucessful deletion
+    response.status = 204;
+  } else {
+    // If no ID is supplied or comment with supplied ID doesn’t exist, returns 404 response 
+    response.status = 404;
+  }
+  
+  return response;
+}
 
 
 // Write all code above this line.
