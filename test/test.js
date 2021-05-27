@@ -469,7 +469,7 @@ describe('Scoop - server.js: ', function() {
 
   });
 
-  describe.only('/comments/:id/downvote PUT', function() {
+  describe('/comments/:id/downvote PUT', function() {
 
     beforeEach(function() {
       database.users['user'] = {
