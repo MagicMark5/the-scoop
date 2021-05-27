@@ -36,7 +36,9 @@ const routes = {
     'PUT': updateComment,
     'DELETE': deleteComment
   },
-  '/comments/:id/upvote': {},
+  '/comments/:id/upvote': {
+    'PUT': upvoteComment
+  },
   '/comments/:id/downvote': {}
 };
 
@@ -370,6 +372,42 @@ function deleteComment(url, request) {
   }
   
   return response;
+};
+
+function upvoteComment(url, request) {
+  // const id = Number(url.split('/').filter(segment => segment)[1]);
+  // const username = request.body && request.body.username;
+  // let savedArticle = database.articles[id];
+  // const response = {};
+
+  // if (savedArticle && database.users[username]) {
+  //   savedArticle = upvote(savedArticle, username);
+
+  //   response.body = {article: savedArticle};
+  //   response.status = 200;
+  // } else {
+  //   response.status = 400;
+  // }
+
+  // return response;
+}
+
+function downvoteComment(url, request) {
+  // const id = Number(url.split('/').filter(segment => segment)[1]);
+  // const username = request.body && request.body.username;
+  // let savedArticle = database.articles[id];
+  // const response = {};
+
+  // if (savedArticle && database.users[username]) {
+  //   savedArticle = downvote(savedArticle, username);
+
+  //   response.body = {article: savedArticle};
+  //   response.status = 200;
+  // } else {
+  //   response.status = 400;
+  // }
+
+  // return response;
 }
 
 
