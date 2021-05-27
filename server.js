@@ -39,7 +39,9 @@ const routes = {
   '/comments/:id/upvote': {
     'PUT': upvoteComment
   },
-  '/comments/:id/downvote': {}
+  '/comments/:id/downvote': {
+    'PUT': downvoteComment
+  }
 };
 
 function getUser(url, request) {
@@ -402,21 +404,30 @@ function upvoteComment(url, request) {
 }
 
 function downvoteComment(url, request) {
-  // const id = Number(url.split('/').filter(segment => segment)[1]);
-  // const username = request.body && request.body.username;
-  // let savedArticle = database.articles[id];
-  // const response = {};
+  /* 
+  PUT /comments/:id/downvote
+  Receives comment ID from URL parameter and username from username property of request body
+  Adds supplied username to downvotedBy of corresponding comment if user hasn’t already downvoted the comment
+  Remove username from upvotedBy if that user had previously upvoted the comment
+  Returns 200 response with comment on comment property of response body
+  If no ID is supplied, comment with supplied ID doesn’t exist, 
+  or user with supplied username doesn’t exist, returns 400 response
+  */
+  const id = Number(url.split('/').filter(segment => segment)[1]);
+  const username = request.body && request.body.username;
+  let savedComment = database.comments[id];
+  const response = {};
 
-  // if (savedArticle && database.users[username]) {
-  //   savedArticle = downvote(savedArticle, username);
+  if (savedComment && database.users[username]) {
+    savedComment = downvote(savedComment, username);
 
-  //   response.body = {article: savedArticle};
-  //   response.status = 200;
-  // } else {
-  //   response.status = 400;
-  // }
+    response.body = {comment: savedComment};
+    response.status = 200;
+  } else {
+    response.status = 400;
+  }
 
-  // return response;
+  return response;
 }
 
 
