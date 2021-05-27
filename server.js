@@ -375,21 +375,30 @@ function deleteComment(url, request) {
 };
 
 function upvoteComment(url, request) {
-  // const id = Number(url.split('/').filter(segment => segment)[1]);
-  // const username = request.body && request.body.username;
-  // let savedArticle = database.articles[id];
-  // const response = {};
+  /*
+  PUT /comments/:id/upvote
+  Receives comment ID from URL parameter and username from username property of request body
+  Adds supplied username to upvotedBy of corresponding comment if user hasn’t already upvoted the comment, 
+  Removes username from downvotedBy if that user had previously downvoted the comment
+  Returns 200 response with comment on comment property of response body
+  If no ID is supplied, comment with supplied ID doesn’t exist,
+  or user with supplied username doesn’t exist, returns 400 response 
+  */
+  const id = Number(url.split('/').filter(segment => segment)[1]);
+  const username = request.body && request.body.username;
+  let savedComment = database.comments[id];
+  const response = {};
 
-  // if (savedArticle && database.users[username]) {
-  //   savedArticle = upvote(savedArticle, username);
+  if (savedComment && database.users[username]) {
+    savedComment = upvote(savedComment, username);
 
-  //   response.body = {article: savedArticle};
-  //   response.status = 200;
-  // } else {
-  //   response.status = 400;
-  // }
+    response.body = {comment: savedComment};
+    response.status = 200;
+  } else {
+    response.status = 400;
+  }
 
-  // return response;
+  return response;
 }
 
 function downvoteComment(url, request) {
