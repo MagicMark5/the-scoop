@@ -383,7 +383,7 @@ describe('Scoop - server.js: ', function() {
 
   });
 
-  describe.only('/commnets/:id/upvote PUT', function() {
+  describe('/commnets/:id/upvote PUT', function() {
 
     beforeEach(function() {
       database.users['user'] = {
@@ -469,7 +469,7 @@ describe('Scoop - server.js: ', function() {
 
   });
 
-  describe('/comments/:id/downvote PUT', function() {
+  describe.only('/comments/:id/downvote PUT', function() {
 
     beforeEach(function() {
       database.users['user'] = {
