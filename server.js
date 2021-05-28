@@ -1,3 +1,12 @@
+const Figg = require('figg');
+
+// config for server side database in ./db/database.json
+const db = new Figg({
+  name: 'database',
+  extension: '.json',
+  path: './db'
+});
+
 // database is let instead of const to allow us to modify it in test.js
 let database = {
   users: {},
@@ -431,7 +440,21 @@ function downvoteComment(url, request) {
 }
 
 
-// Write all code above this line.
+// Write all code for test.js above this line.
+
+// Bonus Challenge: Load and Save database using Figg module 
+
+// database config is saved as 'db'
+
+const loadDatabase = () => {
+  // returns the database object
+  return db.load();
+};
+
+const saveDatabase = () => {
+  // saves database variable to db/database.json
+  db.save();
+};
 
 const http = require('http');
 const url = require('url');

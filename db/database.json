@@ -1,0 +1,100 @@
+{
+  "users": {
+    "user": {
+      "username": "user",
+      "articleIds": [
+        1,
+        1,
+        2,
+        3
+      ],
+      "commentIds": []
+    },
+    "user999": {
+      "username": "user999",
+      "articleIds": [
+        4
+      ],
+      "commentIds": [
+        1
+      ]
+    }
+  },
+  "articles": {
+    "1": {
+      "id": 1,
+      "title": "Mocha Docs - exclusive tests",
+      "url": "https://mochajs.org/#exclusive-tests",
+      "username": "user",
+      "commentIds": [],
+      "upvotedBy": [
+        "user",
+        "user999"
+      ],
+      "downvotedBy": []
+    },
+    "2": {
+      "id": 2,
+      "title": "Adam's GitHub Profile",
+      "url": "https://github.com/MagicMark5",
+      "username": "user",
+      "commentIds": [
+        1
+      ],
+      "upvotedBy": [
+        "user",
+        "user999"
+      ],
+      "downvotedBy": [],
+      "comments": [
+        {
+          "id": 1,
+          "body": "This guy should really code more often",
+          "username": "user999",
+          "articleId": 2,
+          "upvotedBy": [
+            "user"
+          ],
+          "downvotedBy": []
+        }
+      ]
+    },
+    "3": {
+      "id": 3,
+      "title": "Figg docs - npm package",
+      "url": "https://www.npmjs.com/package/figg",
+      "username": "user",
+      "commentIds": [],
+      "upvotedBy": [
+        "user",
+        "user999"
+      ],
+      "downvotedBy": []
+    },
+    "4": {
+      "id": 4,
+      "title": "Gourmet - Cakes",
+      "url": "https://www.dessertlady.ca/gourmet-cakes.html",
+      "username": "user999",
+      "commentIds": [],
+      "upvotedBy": [
+        "user999"
+      ],
+      "downvotedBy": []
+    }
+  },
+  "nextArticleId": 1,
+  "comments": {
+    "1": {
+      "id": 1,
+      "body": "This guy should really code more often",
+      "username": "user999",
+      "articleId": 2,
+      "upvotedBy": [
+        "user"
+      ],
+      "downvotedBy": []
+    }
+  },
+  "nextCommentId": 1
+}
